@@ -4,7 +4,10 @@ A pure Python remote interface to PyRIDE servers.
 It connects via telnet to the server and queries dynamically for the available methods.
 
 # Usage example
-Import `PyRIDERemoteInstance` with ```python from pyride_remote_simple import PyRIDERemoteInstance```.
+Import `PyRIDERemoteInstance` with 
+```python
+from pyride_remote_simple import PyRIDERemoteInstance
+```.
 
 Create a `PyRIDERemoteInstance("robot_hostname_or_ip")` object, if using an interactive python client (`ipython` recommended) you'll get autocompletion and documentation on the available methods. Callbacks are not implemented (yet?).
 
