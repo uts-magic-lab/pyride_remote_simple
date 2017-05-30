@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='pyride_remote_simple',
-      version='0.1',
+      version='0.2',
       description='Pure python PyRIDE online remote client',
       url='https://github.com/uts-magic-lab/pyride_remote_simple',
       author='Sammy Pfeiffer',
