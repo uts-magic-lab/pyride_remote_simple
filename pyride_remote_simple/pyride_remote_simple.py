@@ -23,7 +23,7 @@ class PyRIDERemoteInstance(object):
         print("Connecting to PyRIDE on host " +
               str(host) + " and port " + str(port) + "...")
         self.prc = PyRIDECommander(host, port)
-        self.PyRAIDModuleName = ''
+        self.PyRIDEModuleName = ''
         print("Getting remote instance...")
         self.get_remote_instance()
         print("Ready to make orders!")
@@ -36,7 +36,7 @@ class PyRIDERemoteInstance(object):
 
     def make_call(self, method_name):
         def func(*args, **kwargs):
-            cmd = self.PyRAIDModuleName + "." + method_name + "("
+            cmd = self.PyRIDEModuleName + "." + method_name + "("
             for arg in args:
                 if type(arg) == str:
                     cmd += "'''" + str(arg) + "'''" + ", "
@@ -52,7 +52,7 @@ class PyRIDERemoteInstance(object):
         return func
 
     def get_doc(self, method_name):
-        cmd = self.PyRAIDModuleName + "." + method_name + ".__doc__"
+        cmd = self.PyRIDEModuleName + "." + method_name + ".__doc__"
         return self.prc.send_command(cmd)
 
     def get_remote_instance(self):
@@ -68,13 +68,13 @@ class PyRIDERemoteInstance(object):
             if module.startswith('Py'):
                 robot_module_name = module
                 break
-        self.PyRAIDModuleName = robot_module_name
+        self.PyRIDEModuleName = robot_module_name
 
         method_names = self.prc.send_command(robot_module_name +
                                              '.__dict__.keys()')
         # Magic line to get all docs in once (single call each is too slow)
         getalldocs = """{k:%s.__dict__[k].__doc__ for k in %s.__dict__.keys()}""" % (
-            self.PyRAIDModuleName, self.PyRAIDModuleName)
+            self.PyRIDEModuleName, self.PyRIDEModuleName)
         docs_dict = self.prc.send_command(getalldocs)
         for method_name in method_names:
             if not method_name.startswith('__'):
@@ -111,7 +111,7 @@ class PyRIDECommander(object):
             command += '\r\n'
         self.last_command = command[:-2]
         self.tn.write(command)
-        tmp_output = self.tn.read_until(self.prompt)
+        tmp_output = self.tn.expect(['>>> $'])[2]
 
         if len(tmp_output) > (len(command) + len(self.prompt)):
             self.last_output = tmp_output[len(command):-len(self.prompt)]
